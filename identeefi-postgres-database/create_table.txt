@@ -1,0 +1,65 @@
+create table public.auth
+(
+    username varchar(50) not null,
+    password varchar(50) not null,
+    id       serial,
+    role     varchar(50) not null,
+    primary key (id, username)
+);
+
+alter table public.auth
+    owner to postgres;
+
+create unique index username_id
+    on public.auth (username);
+
+create table public.profile
+(
+    name        varchar(50),
+    description varchar(500),
+    username    varchar(50) not null,
+    website     varchar,
+    location    varchar(50),
+    image       varchar(50),
+    role        varchar(50),
+    id          serial
+        primary key
+);
+
+alter table public.profile
+    owner to postgres;
+
+
+CREATE SEQUENCE product_productid_seq;
+
+create table public.product
+(
+    name         varchar(50),
+    serialnumber varchar(50) default nextval('product_productid_seq'::regclass) not null
+        primary key,
+    brand        varchar(50)
+);
+
+alter table public.product
+    owner to postgres;
+
+-- Insert data into the auth table
+INSERT INTO public.auth (username, password, role) VALUES 
+('admin', 'admin', 'admin'), 
+('supp', 'supp', 'supplier'),
+('manu', 'manu', 'manufacturer'),
+('retailer', 'retailer', 'retailer');
+
+-- Insert data into the product table
+INSERT INTO public.product (name, serialnumber, brand) VALUES 
+('Classic Handbag', 'c12345', 'Chanel'),
+('Flap Bag', 'c123', 'Chanel'),
+('Mini Flap Bag', 'c32145', 'Chanel'),
+('Mini Flap Bag', 'c54321', 'Chanel'),
+('Classic', '456', 'Chanel');
+
+-- Insert data into the profile table
+INSERT INTO public.profile (name, description, username, website, location, role) VALUES 
+('Manu Group', 'Manu Group is one of the biggest manufacturer company in Malaysia, covering the majority of the luxury industry', 'manu', 'www.manu.com.my', 'Kuala Lumpur, Malaysia', 'manufacturer'),
+('CK Supplier', 'CK supplier supplies a myriad of luxury items and has a long-term contract with Chanel, LV, Dior, etc.', 'supp', 'www.cksupp.com.my', 'Bangsar South, Malaysia', 'supplier'),
+('RE retailer', 'RE retailer is the only authorized retailer to resell certain goods from certain luxury brands only, namely Chloe, Hermes, Chanel, and more', 'retailer', 'www.reretailer.com.my', 'Kuala Lumpur, Malaysia', 'retailer');
